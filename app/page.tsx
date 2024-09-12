@@ -31,7 +31,7 @@ export default function Home() {
           ].map((project, index) => (
             <Card
               key={index}
-              className={`aspect-square hover:scale-105 transition-transform duration-300 ${project.status === 'inProgress' ? 'bg-yellow-50' : 'bg-gray-50'}`}
+              className={`aspect-square hover:scale-105 transition-transform duration-300 ${project.status === 'inProgress' ? 'bg-yellow-50 dark:bg-yellow-900' : 'bg-gray-50 dark:bg-gray-800'}`}
               isPressable={!!project.link}
               onPress={() => project.link && window.open(project.link, '_blank')}
             >
@@ -44,12 +44,12 @@ export default function Home() {
                     height={64}
                     className="mb-4 rounded-lg"
                   />
-                  <h2 className={`${title({ size: "sm" })} text-center mb-3`}>{project.name}</h2>
-                  <p className="text-sm text-gray-600 line-clamp-3 overflow-hidden text-center">{project.description}</p>
+                  <h2 className={`${title({ size: "sm" })} text-center mb-3 text-foreground`}>{project.name}</h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 overflow-hidden text-center">{project.description}</p>
                 </div>
                 <div className="mt-auto pt-4 flex items-center justify-center">
                   <div className={`w-3 h-3 rounded-full mr-2 ${project.status === 'inProgress' ? 'bg-yellow-400 animate-pulse' : 'bg-gray-400'}`}></div>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
                     {project.status === 'inProgress' ? '开发中' : '计划中'}
                   </span>
                 </div>
