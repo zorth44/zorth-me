@@ -1,10 +1,12 @@
 "use client";
 
+import React from 'react';
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { Link } from "@nextui-org/link";
 import { title, subtitle } from "@/components/primitives";
 import Image from "next/image";
-import { FaTwitter, FaGithub, FaEnvelope } from 'react-icons/fa';
+import { FaTwitter, FaGithub, FaEnvelope, FaRss, FaUser } from 'react-icons/fa';
+import { BsQuestionCircle } from 'react-icons/bs';
 
 export default function Home() {
   return (
@@ -24,34 +26,52 @@ export default function Home() {
 
         {/* 项目展示 */}
         <div className="w-full md:w-1/2 grid grid-cols-2 gap-4">
-          {[{ name: "ZRss", description: "一个基于Golang的Rss订阅程序", status: "inProgress", link: "https://github.com/zorth44/zorth-rss", icon: "/Rss.png" },
+          {[{ name: "ZRss", description: "一基于Golang的Rss订阅程序", status: "inProgress", link: "https://github.com/zorth44/zorth-rss", icon: FaRss },
           { name: "ZorthMe", description: "简洁的个人主页", status: "inProgress", link: "https://github.com/zorth44/zorth-me", icon: "/me.png" },
-          { name: "即将推出", description: "新项目正在酝酿中...", status: "upcoming", icon: "/wate.png" },
-          { name: "敬请期待", description: "创意正在萌芽...", status: "upcoming", icon: "/wate.png" }
+          { name: "即将推出", description: "新项目正在酝酿中...", status: "upcoming", icon: BsQuestionCircle },
+          { name: "敬请期待", description: "创意正在萌芽...", status: "upcoming", icon: BsQuestionCircle }
           ].map((project, index) => (
             <Card
               key={index}
-              className={`aspect-square hover:scale-105 transition-transform duration-300 ${project.status === 'inProgress' ? 'bg-yellow-50 dark:bg-yellow-900' : 'bg-gray-50 dark:bg-gray-800'}`}
+              className={`aspect-square hover:scale-105 transition-transform duration-300 ${
+                project.status === 'inProgress' 
+                  ? 'bg-yellow-50 dark:bg-blue-900' 
+                  : 'bg-gray-50 dark:bg-gray-800'
+              }`}
               isPressable={!!project.link}
               onPress={() => project.link && window.open(project.link, '_blank')}
             >
-              <CardBody className="flex flex-col justify-between p-4">
+              <CardBody className="flex flex-col justify-between p-6">
                 <div className="flex flex-col items-center">
-                  <Image
-                    src={project.icon || '/default-icon.png'}
-                    alt={`${project.name} icon`}
-                    width={64}
-                    height={64}
-                    className="mb-4 rounded-lg"
-                  />
-                  <h2 className={`${title({ size: "sm" })} text-center mb-3 text-foreground`}>{project.name}</h2>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 overflow-hidden text-center">{project.description}</p>
+                  <div className="mb-4 p-3 rounded-full bg-gradient-to-br from-primary to-secondary">
+                    {typeof project.icon === 'string' ? (
+                      <Image src={project.icon} alt={project.name} width={40} height={40} className="rounded-full" />
+                    ) : (
+                      React.createElement(project.icon, {
+                        size: 40,
+                        className: "text-white"
+                      })
+                    )}
+                  </div>
+                  <h2 className={`${title({ size: "sm" })} text-center mb-2 text-foreground`}>{project.name}</h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 overflow-hidden text-center">{project.description}</p>
                 </div>
-                <div className="mt-auto pt-4 flex items-center justify-center">
-                  <div className={`w-3 h-3 rounded-full mr-2 ${project.status === 'inProgress' ? 'bg-yellow-400 animate-pulse' : 'bg-gray-400'}`}></div>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    {project.status === 'inProgress' ? '开发中' : '计划中'}
-                  </span>
+                <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-600 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className={`w-2 h-2 rounded-full mr-2 ${
+                      project.status === 'inProgress' 
+                        ? 'bg-yellow-400 dark:bg-blue-400 animate-pulse' 
+                        : 'bg-gray-400'
+                    }`}></div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {project.status === 'inProgress' ? '开发中' : '计划中'}
+                    </span>
+                  </div>
+                  {project.link && (
+                    <Link href={project.link} className="text-xs text-primary hover:underline">
+                      查看详情
+                    </Link>
+                  )}
                 </div>
               </CardBody>
             </Card>
