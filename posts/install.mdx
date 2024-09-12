@@ -1,0 +1,133 @@
+---
+title: 安装手册
+description: 描述如何部署页面
+order: 3
+---
+
+# 首次部署
+
+1. 克隆你的项目仓库到服务器：
+
+```bash
+git clone https://github.com/zorth44/zorth-me.git /path/to/your/project
+```
+
+2. 进入你的项目目录：
+
+```bash
+cd /path/to/your/project
+```
+
+3. 安装依赖：
+
+```bash
+npm install
+```
+
+4. 构建项目
+
+```bash
+npm run build
+```
+
+5. 使用PM2启动项目
+```bash
+pm2 start npm --name "next-app" -- start
+pm2 save
+```
+
+6. 更新nginx配置
+
+进入nginx目录
+```bash
+sudo nano /etc/nginx/nginx.conf
+```
+
+添加配置
+```
+server {
+    listen 80;
+    server_name your_domain.com;
+ 
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+配置修改完成后不要忘记更新nginx
+```bash
+sudo systemctl restart nginx
+```
+
+至此完成首次部署
+
+# 增量部署
+
+1. 添加增量部署脚本
+
+```bash
+#!/bin/bash
+
+# 设置日志文件
+LOG_FILE="/root/deploy_log.txt"
+
+# 函数：记录日志
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
+}
+
+# 函数：检查上一个命令是否成功
+check_status() {
+    if [ $? -ne 0 ]; then
+        log "错误: $1"
+        exit 1
+    fi
+}
+
+# 开始部署
+log "开始部署流程"
+
+# 进入项目目录
+cd /root/zorth-me/
+check_status "无法进入项目目录"
+
+# 拉取最新代码
+log "正在拉取最新代码..."
+git pull
+check_status "Git pull 失败"
+
+# 安装依赖
+log "正在安装依赖..."
+npm install
+check_status "npm install 失败"
+
+# 构建项目
+log "正在构建项目..."
+npm run build
+check_status "npm run build 失败"
+
+# 重启应用
+log "正在重启应用..."
+pm2 restart next-app
+check_status "pm2 重启失败"
+
+log "部署完成"
+
+```
+
+2. 赋予增量部署脚本权限
+
+```bash
+chmod 777 deploy.sh
+```
+
+每次完成代码推送后，运行脚本即可
+
+
+
+

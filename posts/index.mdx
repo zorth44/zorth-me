@@ -1,0 +1,173 @@
+---
+title: 入门手册
+description: Your first document
+order: 1
+---
+
+# 文档的目录层级如何管理
+
+在这个项目中，你可以通过以下方式管理文档的先后顺序和层级关系：
+
+1. 文件命名和目录结构
+
+   在 `content/docs` 目录下，你可以通过创建子目录和文件来组织文档的层级结构。例如：
+
+   ```
+   content/docs/
+   ├── 01-getting-started.mdx
+   ├── 02-basic-concepts/
+   │   ├── 01-introduction.mdx
+   │   └── 02-core-features.mdx
+   └── 03-advanced-topics/
+       ├── 01-performance.mdx
+       └── 02-security.mdx
+   ```
+
+   使用数字前缀可以控制文档的顺序。
+
+## 怎么进行多层级的嵌套
+要修改文件夹显示的名称，你可以使用以下几种方法：
+
+1. 使用 `source.config.ts` 文件
+
+在 `source.config.ts` 文件中，你可以定义文件夹的显示名称：
+
+```typescript
+:source.config.ts
+import { defineDocs, defineConfig } from 'fumadocs-mdx/config';
+
+export const { docs, meta } = defineDocs({
+  structure: {
+    'basic-concepts': {
+      title: '基本概念', // 这里定义文件夹的显示名称
+      children: ['introduction', 'core-features'],
+    },
+    // ... 其他文件夹和文档
+  },
+});
+
+export default defineConfig();
+```
+
+2. 在文件夹中添加 `_meta.json` 文件
+
+在 `02-basic-concepts` 文件夹中创建一个 `_meta.json` 文件：
+
+```json
+:content/docs/02-basic-concepts/_meta.json
+{
+  "title": "基本概念"
+}
+```
+
+3. 在文件夹中添加 `index.mdx` 文件
+
+在 `02-basic-concepts` 文件夹中创建一个 `index.mdx` 文件，并在其中使用前置元数据定义标题：
+
+```
+mdx:content/docs/02-basic-concepts/index.mdx
+---
+title: 基本概念
+---
+
+这里是基本概念的概述...
+```
+
+这些方法中，使用 `source.config.ts` 文件是最集中和灵活的方式，因为它允许你在一个地方管理整个文档结构。但是，如果你更喜欢将元数据保持在靠近内容的地方，那么使用 `_meta.json` 或 `index.mdx` 文件也是很好的选择。
+
+选择最适合你的项目结构和管理偏好的方法。
+
+2. 前置元数据
+
+   在每个 MDX 文件的开头，你可以使用前置元数据来定义文档的属性。例如：
+
+   ```mdx
+   ---
+   title: 入门指南
+   description: 快速上手的指南
+   order: 1
+   ---
+   ```
+
+   你可以添加一个 `order` 字段来明确指定文档的顺序。
+
+3. 配置文件
+
+   你可以创建一个配置文件来定义文档的结构。在你的项目中，可以修改 `source.config.ts` 文件：
+
+   
+```
+1:5:source.config.ts
+import { defineDocs, defineConfig } from 'fumadocs-mdx/config';
+
+export const { docs, meta } = defineDocs();
+
+export default defineConfig();
+```
+
+
+   你可以扩展这个配置，例如：
+
+   ```typescript
+   import { defineDocs, defineConfig } from 'fumadocs-mdx/config';
+
+   export const { docs, meta } = defineDocs({
+     structure: {
+       'getting-started': {
+         title: '入门指南',
+         order: 1,
+       },
+       'basic-concepts': {
+         title: '基本概念',
+         order: 2,
+         children: ['introduction', 'core-features'],
+       },
+       'advanced-topics': {
+         title: '高级主题',
+         order: 3,
+         children: ['performance', 'security'],
+       },
+     },
+   });
+
+   export default defineConfig();
+   ```
+
+   这种方法允许你在一个中心位置定义整个文档结构。
+
+4. 使用 Fumadocs 的 API
+
+   Fumadocs 提供了一些 API 来帮助你管理文档结构。你可以在 `app/source.ts` 文件中使用这些 API：
+
+   
+```
+1:8:app/source.ts
+import { docs, meta } from '@/.source';
+import { createMDXSource } from 'fumadocs-mdx';
+import { loader } from 'fumadocs-core/source';
+
+export const source = loader({
+  baseUrl: '/docs',
+  source: createMDXSource(docs, meta),
+});
+```
+
+
+   你可以扩展这个配置，例如：
+
+   ```typescript
+   import { docs, meta } from '@/.source';
+   import { createMDXSource } from 'fumadocs-mdx';
+   import { loader } from 'fumadocs-core/source';
+
+   export const source = loader({
+     baseUrl: '/docs',
+     source: createMDXSource(docs, meta),
+     orderBy: 'order',
+     sortSubItems: true,
+   });
+   ```
+
+   这里的 `orderBy` 和 `sortSubItems` 选项可以帮助你控制文档的排序。
+
+通过结合使用这些方法，你可以灵活地管理文档的顺序和层级关系。根据你的具体需求，你可以选择最适合的方法或组合使用多种方法。
