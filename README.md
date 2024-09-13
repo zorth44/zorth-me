@@ -1,8 +1,6 @@
-# Next.js & NextUI Template
+# Zorth's Homepage
 
-This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
-
-[Try it on CodeSandbox](https://githubbox.com/nextui-org/next-app-template)
+This is the source code of My Homepage.
 
 ## Technologies Used
 
@@ -16,9 +14,12 @@ This is a template for creating applications using Next.js 14 (app directory) an
 
 ## How to Use
 
-### Use the template with create-next-app
+### Clone the repository
+```bash
+git clone https://github.com/zorth-dev/homepage.git
+```
 
-To create a new project based on this template using `create-next-app`, run the following command:
+### Install dependencies
 
 ```bash
 npx create-next-app -e https://github.com/nextui-org/next-app-template
@@ -47,7 +48,3 @@ public-hoist-pattern[]=*@nextui-org/*
 ```
 
 After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
-
-## License
-
-Licensed under the [MIT license](https://github.com/nextui-org/next-app-template/blob/main/LICENSE).
