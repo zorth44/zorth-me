@@ -38,17 +38,17 @@ export default function RootLayout({
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
+          fontSans.variable
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="relative flex flex-col h-screen">
             <Navbar />
-            <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+            <main className="container mx-auto max-w-7xl flex-grow px-6 pt-16 pb-8">
               {children}
             </main>
-            <footer className="w-full flex items-center justify-center py-3">
-                <span className="text-default-600">© 2024 zorth</span>
+            <footer className="w-full flex items-center justify-center py-3 border-t border-divider">
+              <span className="text-default-600 text-sm">© 2024 zorth</span>
             </footer>
           </div>
         </Providers>
